@@ -3,7 +3,7 @@
 # Use a lightweight Python base image.
 # python:3.9-slim-buster is a good choice for Debian-based systems.
 # Alternatively, python:3.9-slim is more generic.
-FROM python:3.9-slim
+FROM python:3.11-slim
 
 # Set the working directory inside the container.
 # All subsequent commands will be executed from this directory.
