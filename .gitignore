@@ -9,6 +9,10 @@ venv/
 .dockerignore
 *.log
 temp/
-# Pliki systemowe Mac/Windows
+# System files Mac/Windows
 .DS_Store
 Thumbs.db
+
+# SSL certificates (for development/local use)
+nginx/certs/*.crt
+nginx/certs/*.key
