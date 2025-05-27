@@ -1,0 +1,50 @@
+# docker-compose.yml (located in the project root directory)
+
+# Specifies the Docker Compose file format version.
+# Version 3.9 is recommended for latest features.
+version: '3.9'
+
+# Defines the services (containers) that make up your application.
+services:
+  # Service definition for the Flask application.
+  app:
+    # Specifies the build context for the 'app' service.
+    # Docker will look for a Dockerfile in the './app' directory relative to docker-compose.yml.
+    build: ./app
+    # Maps ports from the host machine to the container.
+    # "HOST_PORT:CONTAINER_PORT"
+    # Port 8000 on the host will be mapped to port 8000 inside the 'app' container,
+    # which is where the Flask application (via Gunicorn) is listening.
+    ports:
+      - "8000:8000"
+    # Mounts host paths or named volumes into the container.
+    # This creates a persistent storage for uploaded files.
+    # './app/files' (on the host) is mapped to '/app/files' (inside the container).
+    volumes:
+      - ./app/files:/app/files
+    # Optional: Instructs Docker to restart the container always,
+    # unless it is explicitly stopped or Docker is stopped.
+    restart: always
+
+  # Service definition for the Nginx reverse proxy.
+  nginx:
+    # Uses the latest official Nginx image from Docker Hub.
+    image: nginx:latest
+    # Maps ports from the host machine to the container.
+    # Port 443 (standard HTTPS port) on the host is mapped to port 443 inside the Nginx container.
+    # This is the primary port through which external users will access your application securely.
+    ports:
+      - "443:443"
+    # Mounts Nginx configuration and SSL certificates into the container.
+    # './nginx/nginx.conf' on host -> '/etc/nginx/nginx.conf' in container (read-only).
+    # './nginx/certs' on host -> '/etc/nginx/certs' in container (read-only).
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    # Specifies service dependencies.
+    # This ensures that the 'app' service starts before the 'nginx' service.
+    # Nginx needs the 'app' service to be running to successfully proxy requests to it.
+    depends_on:
+      - app
+    # Optional: Instructs Docker to restart the container always.
+    restart: always
