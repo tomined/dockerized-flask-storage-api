@@ -1,9 +1,5 @@
 # docker-compose.yml (located in the project root directory)
 
-# Specifies the Docker Compose file format version.
-# Version 3.9 is recommended for latest features.
-version: '3.9'
-
 # Defines the services (containers) that make up your application.
 services:
   # Service definition for the Flask application.
