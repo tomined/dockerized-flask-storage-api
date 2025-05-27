@@ -16,3 +16,6 @@ Thumbs.db
 # SSL certificates (for development/local use)
 nginx/certs/*.crt
 nginx/certs/*.key
+
+# Directory for store files
+app/files/
