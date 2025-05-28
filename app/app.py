@@ -51,39 +51,6 @@ def get_file(filename):
     # If the file does not exist, return a 404 Not Found error
     return jsonify({"error": "File not found."}), 404
 
-@app.route("/files/filter", methods=["GET"])
-def filter_files():
-    """
-    Endpoint to filter files based on a search string present in their filename.
-    The search string is provided as a 'search_string' query parameter.
-    Returns a JSON array of matching file objects.
-    """
-    # Get the search string from the URL query parameters.
-    # Defaults to an empty string if 'search_string' parameter is not provided.
-    search_string = request.args.get('search_string', '')
-
-    matching_files = []
-
-    # If the search_string is empty, return a 400 Bad Request error.
-    # A search string is required for this filtering endpoint.
-    if not search_string:
-        return jsonify({"error": "Parameter 'search_string' is required."}), 400
-    
-    # Iterate through all files and directories in the specified FILES_DIR.
-    for filename in os.listdir(FILES_DIR):
-        file_path = os.path.join(FILES_DIR, filename)
-
-        # Ensure the current item is a file (not a directory) before processing.
-        if os.path.isfile(file_path):
-            # Check if the search string is a substring of the filename (case-insensitive).
-            if search_string.lower() in filename.lower():
-                # If a match is found, add the file's name and size to the list.
-                matching_files.append({"name": filename, "size": os.path.getsize(file_path)})
-
-    # Return the list of matching files as a JSON array with a 200 OK status.
-    # If no files match, an empty array [] will be returned.
-    return jsonify(matching_files), 200
-
 @app.route("/files/<filename>", methods=["POST"])
 def upload_file_post(filename):
     """
@@ -157,7 +124,6 @@ def delete_file(filename):
             return jsonify({"error": str(e)}), 500
     # If the file does not exist, return a 404 Not Found error
     return jsonify({"error": "File does not exist."}), 404
-        
 
 @app.route("/files/<filename>/append_line", methods=["POST"])
 def append_line_post(filename):
