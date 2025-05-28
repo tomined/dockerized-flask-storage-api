@@ -19,6 +19,7 @@ A robust and secure RESTful API for file storage, built with Flask, served by Gu
 5.  [API Endpoints](#api-endpoints)
     * [Base URL](#base-url)
     * [Listing Files (GET /files)](#listing-files-get-files)
+    * [Filtering Files (GET /files/filter)](#filtering-files-get-filesfilter)
     * [Downloading a File (GET /files/<filename>)](#downloading-a-file-get-filesfilename)
     * [Uploading a New File (POST /files/<filename>)](#uploading-a-new-file-post-filesfilename)
     * [Overwriting/Updating a File (PUT /files/<filename>)](#overwritingupdating-a-file-put-filesfilename)
@@ -142,6 +143,39 @@ Retrieves a list of all files currently stored on the server, including their na
     ```bash
     curl -k https://localhost/files
     ```
+
+---
+
+### Filtering Files (GET /files/filter)
+
+Retrieves a list of files whose names contain a specific search string (case-insensitive).
+
+* **URL:** `https://localhost/files/filter`
+* **Method:** `GET`
+* **Query Parameters:**
+    * `search_string` (required): The string to search for within file names.
+* **Response:**
+    ```json
+    [
+        {"name": "document.txt", "size": 1234},
+        {"name": "another_document.pdf", "size": 5678}
+    ]
+    ```
+    (Returns an empty array `[]` if no matching files are found.)
+* **Error Response:**
+    ```json
+    {"error": "Parameter 'search_string' is required."}
+    ```
+    (If `search_string` is not provided.)
+* **Example (using curl):**
+    ```bash
+    curl -k https://localhost/files/filter?search_string=doc
+    ```
+    ```bash
+    curl -k https://localhost/files/filter?search_string=report
+    ```
+
+---
 
 ### Downloading a File (GET /files/<filename>)
 
